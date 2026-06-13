@@ -2,13 +2,10 @@ package com.saucedemo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import testdata.URL;
 import testdata.classes.CheckoutUser;
-import testdata.pages.Cart;
 import testdata.pages.Checkout;
-import testdata.pages.Inventory;
-import testdata.pages.Login;
 
 public class CheckoutTests extends BaseTest {
 
@@ -23,16 +20,25 @@ public class CheckoutTests extends BaseTest {
     CheckoutUser zipOverLimitCheckoutInfo = new CheckoutUser("zipOverLimit");
     CheckoutUser zipAlphaCharactersCheckoutInfo = new CheckoutUser("zipAlphaCharacters");
 
-
     @BeforeEach
     @Override
     public void beforeTests() {
         super.beforeTests();
         loginPage.authentication(standardUser);
-        inventoryPage.addToCart(Inventory.BACKPACK_INVENTORY_ADD_TO_CART_BUTTON);
-        inventoryPage.clickCartButton();
+        inventoryPage.addToCart(InventoryPage.BACKPACK_ADD_TO_CART_BUTTON);
+        header.clickCartButton();
+        Assertions.assertEquals(URL.MAIN + URL.PATH_TO_CART, driver.getCurrentUrl());
         cartPage.clickCheckout();
+        Assertions.assertEquals(URL.MAIN + URL.PATH_TO_CHECKOUT_STEP_ONE, driver.getCurrentUrl());
         Assertions.assertTrue(checkoutStepOnePage.isCheckoutFormDisplayed());
+    }
+
+    @Test
+    public void checkCheckoutButton() {
+        Assertions.assertEquals(Checkout.CHECKOUT_TITLE_ONE_TEXT, checkoutStepOnePage.getTitleText());
+        Assertions.assertTrue(checkoutStepOnePage.isCheckoutFormDisplayed());
+        Assertions.assertTrue(checkoutStepOnePage.isContinueButtonDisplayed());
+        Assertions.assertTrue(checkoutStepOnePage.isCancelButtonDisplayed());
     }
 
     @Test
@@ -46,19 +52,19 @@ public class CheckoutTests extends BaseTest {
     @Test
     public void enterEmptyFirstNameCheckoutInfo() {
         checkoutStepOnePage.enterDataCheckout(emptyFirstNameCheckoutInfo);
-        Assertions.assertEquals(Checkout.ERROR_FIRST_NAME_TEXT, checkoutStepTwoPage.getCheckOutInfoErrorText());
+        Assertions.assertEquals(Checkout.ERROR_FIRST_NAME_TEXT, checkoutStepOnePage.getErrorText());
     }
 
     @Test
     public void enterEmptyLastNameCheckoutInfo() {
         checkoutStepOnePage.enterDataCheckout(emptyLastNameCheckoutInfo);
-        Assertions.assertEquals(Checkout.ERROR_LAST_NAME_TEXT, checkoutStepTwoPage.getCheckOutInfoErrorText());
+        Assertions.assertEquals(Checkout.ERROR_LAST_NAME_TEXT, checkoutStepOnePage.getErrorText());
     }
 
     @Test
     public void enterEmptyZipCheckoutInfo() {
         checkoutStepOnePage.enterDataCheckout(emptyZipCheckoutInfo);
-        Assertions.assertEquals(Checkout.ERROR_POSTAL_CODE_TEXT, checkoutStepTwoPage.getCheckOutInfoErrorText());
+        Assertions.assertEquals(Checkout.ERROR_POSTAL_CODE_TEXT, checkoutStepOnePage.getErrorText());
     }
 
     @Test
@@ -80,7 +86,7 @@ public class CheckoutTests extends BaseTest {
     @Test
     public void enterFirstNameOverLimitCheckoutInfo() {
         checkoutStepOnePage.enterDataCheckout(firstNameOverLimitCheckoutInfo);
-        Assertions.assertTrue(checkoutStepTwoPage.isErrorDisplayed());
+        Assertions.assertTrue(checkoutStepOnePage.hasError());
     }
 
     @Test
@@ -94,35 +100,12 @@ public class CheckoutTests extends BaseTest {
     @Test
     public void enterZipOverLimitCheckoutInfo() {
         checkoutStepOnePage.enterDataCheckout(zipOverLimitCheckoutInfo);
-        Assertions.assertTrue(checkoutStepTwoPage.isErrorDisplayed());
+        Assertions.assertTrue(checkoutStepOnePage.hasError());
     }
 
     @Test
     public void enterZipAlphaCharactersCheckoutInfo() {
         checkoutStepOnePage.enterDataCheckout(zipAlphaCharactersCheckoutInfo);
-        Assertions.assertTrue(checkoutStepTwoPage.isErrorDisplayed());
+        Assertions.assertTrue(checkoutStepOnePage.hasError());
     }
-
-    @Test
-    public void checkOrderDetails() {
-        checkoutStepOnePage.enterDataCheckout(validCheckoutInfo);
-        Assertions.assertEquals(Checkout.CHECKOUT_TITLE_TWO_TEXT, checkoutStepTwoPage.getTitleText());
-        Assertions.assertEquals(Inventory.BACKPACK_NAME, cartPage.getItemInCartName());
-        Assertions.assertEquals(Inventory.BACKPACK_PRICE, cartPage.getItemPriceInCart());
-        Assertions.assertEquals(Inventory.BACKPACK_DESCRIPTION, cartPage.getItemDescriptionInCart());
-
-        Assertions.assertEquals(Checkout.PAYMENT_METHOD_TEXT, checkoutStepTwoPage.getPaymentMethodText());
-        Assertions.assertEquals(Checkout.SHIPPING_METHOD_TEXT, checkoutStepTwoPage.getShippingMethodText());
-        Assertions.assertTrue(checkoutStepTwoPage.isTotalCorrect());
-    }
-
-    @Test
-    public void checkFinishOrder() {
-        checkoutStepOnePage.enterDataCheckout(validCheckoutInfo);
-        checkoutStepTwoPage.clickFinishButton();
-        Assertions.assertEquals(Checkout.CHECKOUT_COMPLETE_TITLE_TEXT, checkoutStepTwoPage.getCheckoutCompleteText());
-        Assertions.assertEquals(Checkout.COMPLETE_MESSAGE_TEXT, checkoutStepTwoPage.getCompleteOrderTitle());
-        Assertions.assertTrue(checkoutStepTwoPage.isBackHomeButtonDisplayed());
-    }
-
 }

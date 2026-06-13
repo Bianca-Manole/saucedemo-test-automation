@@ -4,9 +4,9 @@ import com.saucedemo.utils.Reader;
 import org.json.simple.JSONObject;
 
 public class CheckoutUser {
-    private String firstName;
-    private String lastName;
-    private String zip;
+    private final String firstName;
+    private final String lastName;
+    private final String zip;
 
     public CheckoutUser(String userType) {
         JSONObject user = (JSONObject) Reader.json("checkout").get(userType);

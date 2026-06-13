@@ -1,128 +1,94 @@
 package com.saucedemo;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import testdata.pages.Cart;
-import testdata.pages.Checkout;
-import testdata.pages.Inventory;
 
 public class CheckoutStepTwoPage {
     WebDriver driver;
+
+    private static final By CHECKOUT_TITLE_TWO = By.cssSelector("[data-test='title']");
+    private static final By CHECKOUT_COMPLETE_TITLE = By.className("title");
+    private static final By COMPLETE_MESSAGE = By.className("complete-header");
+    private static final By CANCEL_BUTTON = By.id("cancel");
+    private static final By PAYMENT_INFORMATION = By.cssSelector("[data-test='payment-info-label']");
+    private static final By ITEM_TOTAL = By.cssSelector("[data-test='subtotal-label']");
+    private static final By TAX = By.cssSelector("[data-test='tax-label']");
+    private static final By TOTAL = By.cssSelector("[data-test='total-label']");
+    private static final By FINISH_BUTTON = By.id("finish");
+    private static final By PAYMENT_METHOD = By.cssSelector("[data-test='payment-info-value']");
+    private static final By SHIPPING_METHOD = By.cssSelector("[data-test='shipping-info-value']");
+    private static final By BACK_HOME_BUTTON = By.id("back-to-products");
+    private static final By CART_ITEM_NAME = By.cssSelector("[data-test='inventory-item-name']");
+    private static final By CART_ITEM_PRICE = By.cssSelector("[data-test='inventory-item-price']");
+    private static final By CART_ITEM_DESCRIPTION = By.cssSelector("[data-test='inventory-item-desc']");
 
     public CheckoutStepTwoPage(WebDriver driver) {
         this.driver = driver;
     }
 
     public String getTitleText() {
-        return driver.findElement(Checkout.CHECKOUT_TITLE_TWO).getText();
+        return driver.findElement(CHECKOUT_TITLE_TWO).getText();
     }
 
     public boolean isFinishButtonDisplayed() {
-        return driver.findElement(Checkout.FINISH_BUTTON).isDisplayed();
+        return driver.findElement(FINISH_BUTTON).isDisplayed();
     }
 
     public void clickFinishButton() {
-        driver.findElement(Checkout.FINISH_BUTTON).click();
+        driver.findElement(FINISH_BUTTON).click();
     }
 
     public boolean isCancelButtonDisplayed() {
-        return driver.findElement(Checkout.CANCEL_BUTTON).isDisplayed();
+        return driver.findElement(CANCEL_BUTTON).isDisplayed();
     }
-
-    public String getCheckOutInfoErrorText() {
-        return driver.findElement(Checkout.ERROR).getText();
-    }
-
-    public boolean isErrorDisplayed() {
-        return driver.findElement(Checkout.ERROR).isDisplayed();
-    }
-
 
     public String getCheckoutItemName() {
-        return driver.findElement(Cart.CART_ITEM_NAME).getText();
+        return driver.findElement(CART_ITEM_NAME).getText();
     }
 
     public String getCheckoutItemPrice() {
-        return driver.findElement(Cart.CART_ITEM_PRICE).getText();
+        return driver.findElement(CART_ITEM_PRICE).getText();
     }
 
     public String getCheckoutItemDescription() {
-        return driver.findElement(Cart.CART_ITEM_DESCRIPTION).getText();
+        return driver.findElement(CART_ITEM_DESCRIPTION).getText();
     }
 
     public boolean isPaymentInformationDisplayed() {
-        return driver.findElement(Checkout.PAYMENT_INFORMATION).isDisplayed();
-    }
-
-    public String getPaymentInformationText() {
-        return driver.findElement(Checkout.PAYMENT_INFORMATION).getText();
-    }
-
-    public boolean isPaymentMethodDisplayed() {
-        return driver.findElement(Checkout.PAYMENT_METHOD).isDisplayed();
+        return driver.findElement(PAYMENT_INFORMATION).isDisplayed();
     }
 
     public String getPaymentMethodText() {
-        return driver.findElement(Checkout.PAYMENT_METHOD).getText();
-    }
-
-    public boolean isShippingMethodDisplayed() {
-        return driver.findElement(Checkout.SHIPPING_METHOD).isDisplayed();
+        return driver.findElement(PAYMENT_METHOD).getText();
     }
 
     public String getShippingMethodText() {
-        return driver.findElement(Checkout.SHIPPING_METHOD).getText();
-    }
-
-    public boolean isItemTotalDisplayed() {
-        return driver.findElement(Checkout.ITEM_TOTAL).isDisplayed();
-    }
-
-    public String getItemTotalText() {
-        return driver.findElement(Checkout.ITEM_TOTAL).getText();
-    }
-
-    public boolean isTaxDisplayed() {
-        return driver.findElement(Checkout.TAX).isDisplayed();
-    }
-
-    public String getTaxText() {
-        return driver.findElement(Checkout.TAX).getText();
-    }
-
-    public boolean isTotalPriceDisplayed() {
-        return driver.findElement(Checkout.TOTAL).isDisplayed();
-    }
-
-    public String getTotalFromPage() {
-        return driver.findElement(Checkout.TOTAL).getText();
+        return driver.findElement(SHIPPING_METHOD).getText();
     }
 
     public boolean isTotalCorrect() {
         double itemTotal = Double.parseDouble(
-                driver.findElement(Checkout.ITEM_TOTAL).getText()
+                driver.findElement(ITEM_TOTAL).getText()
                         .replace("Item total: $", ""));
         double tax = Double.parseDouble(
-                driver.findElement(Checkout.TAX).getText()
+                driver.findElement(TAX).getText()
                         .replace("Tax: $", ""));
         double total = Double.parseDouble(
-                driver.findElement(Checkout.TOTAL).getText()
+                driver.findElement(TOTAL).getText()
                         .replace("Total: $", ""));
 
         return Math.round((itemTotal + tax) * 100.0) / 100.0 == total;
     }
 
     public String getCheckoutCompleteText() {
-        return driver.findElement(Checkout.CHECKOUT_COMPLETE_TITLE).getText();
+        return driver.findElement(CHECKOUT_COMPLETE_TITLE).getText();
     }
 
     public String getCompleteOrderTitle() {
-        return driver.findElement(Checkout.COMPLETE_MESSAGE).getText();
+        return driver.findElement(COMPLETE_MESSAGE).getText();
     }
 
     public boolean isBackHomeButtonDisplayed() {
-        return driver.findElement(Checkout.BACK_HOME_BUTTON).isDisplayed();
+        return driver.findElement(BACK_HOME_BUTTON).isDisplayed();
     }
-
-
-
 }

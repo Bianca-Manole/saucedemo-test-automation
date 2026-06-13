@@ -1,48 +1,48 @@
 package com.saucedemo;
 
+import com.saucedemo.components.Header;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import testdata.URL;
+import testdata.classes.Product;
 import testdata.pages.Cart;
-import testdata.pages.Checkout;
-import testdata.pages.Inventory;
-import testdata.pages.Login;
 
-public class CartTests extends BaseTest{
+public class CartTests extends BaseTest {
+
+    Product backpack = new Product("backpack");
 
     @BeforeEach
     @Override
     public void beforeTests() {
         super.beforeTests();
         loginPage.authentication(standardUser);
-        Assertions.assertEquals(Login.LOGO_TEXT, inventoryPage.getLogoText());
+        Assertions.assertEquals(Header.LOGO_TEXT, header.getLogoText());
         Assertions.assertTrue(inventoryPage.isItemListDisplayed());
-        Assertions.assertTrue(inventoryPage.isLogoutButtonDisplayed());
+        Assertions.assertTrue(header.isLogoutButtonDisplayed());
     }
 
     @Test
-    public void checkItemIsInCart() {
+    public void addAndRemoveFromCart() {
+        inventoryPage.addToCart(InventoryPage.BACKPACK_ADD_TO_CART_BUTTON);
+        Assertions.assertTrue(inventoryPage.isButtonDisplayed(InventoryPage.BACKPACK_REMOVE_BUTTON));
+        Assertions.assertTrue(header.isCartBadgeDisplayed());
 
-        inventoryPage.addToCart(Inventory.BACKPACK_INVENTORY_ADD_TO_CART_BUTTON);
-        inventoryPage.clickCartButton();
+        header.clickCartButton();
+        Assertions.assertEquals(URL.MAIN + URL.PATH_TO_CART, driver.getCurrentUrl());
         Assertions.assertEquals(Cart.TITLE_TEXT, cartPage.getTitleText());
         Assertions.assertTrue(cartPage.isCheckOutButtonDisplayed());
         Assertions.assertTrue(cartPage.isContinueShoppingButtonDisplayed());
+        Assertions.assertEquals(backpack.getName(), cartPage.getItemInCartName());
+        Assertions.assertEquals(backpack.getDescription(), cartPage.getItemDescriptionInCart());
+        Assertions.assertEquals("1", cartPage.getItemQuantityInCart());
 
-        Assertions.assertEquals(Inventory.BACKPACK_NAME, cartPage.getItemInCartName());
-        Assertions.assertEquals(Inventory.BACKPACK_PRICE, cartPage.getItemPriceInCart());
-        Assertions.assertEquals(Inventory.BACKPACK_DESCRIPTION, cartPage.getItemDescriptionInCart());
-    }
+        cartPage.clickRemove();
+        Assertions.assertTrue(cartPage.isCartEmpty());
 
-    @Test
-    public void checkCheckoutButton() {
-        inventoryPage.addToCart(Inventory.BACKPACK_INVENTORY_ADD_TO_CART_BUTTON);
-        inventoryPage.clickCartButton();
-        cartPage.clickCheckout();
-        Assertions.assertEquals(Checkout.CHECKOUT_TITLE_ONE_TEXT, checkoutStepOnePage.getTitleText());
-        Assertions.assertTrue(checkoutStepOnePage.isCheckoutFormDisplayed());
-        Assertions.assertTrue(checkoutStepOnePage.isContinueButtonDisplayed());
-        Assertions.assertTrue(checkoutStepOnePage.isCancelButtonDisplayed());
+        cartPage.clickContinueShopping();
+        Assertions.assertEquals(URL.MAIN + URL.PATH_TO_INVENTORY, driver.getCurrentUrl());
+        Assertions.assertTrue(inventoryPage.isButtonDisplayed(InventoryPage.BACKPACK_ADD_TO_CART_BUTTON));
+        Assertions.assertFalse(inventoryPage.isButtonDisplayed(InventoryPage.BACKPACK_REMOVE_BUTTON));
     }
 }

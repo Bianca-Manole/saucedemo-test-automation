@@ -1,5 +1,6 @@
 package com.saucedemo;
 
+import com.saucedemo.components.Header;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +8,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import testdata.URL;
 import testdata.classes.User;
-import testdata.pages.Login;
 
 import java.time.Duration;
 
@@ -19,17 +19,15 @@ public class BaseTest {
     static CartPage cartPage;
     static CheckoutStepOnePage checkoutStepOnePage;
     static CheckoutStepTwoPage checkoutStepTwoPage;
-
+    static Header header;
 
     public User standardUser = new User("standard");
     public User lockedUser = new User("locked");
     public User invalidUser = new User("invalid");
 
-
     @BeforeAll
     public static void before() {
         ChromeOptions chromeOption = new ChromeOptions();
-
         chromeOption.addArguments("--remote-allow-origins=*", "ignore-certificate-errors");
         chromeOption.addArguments("disable-infobars");
         chromeOption.addArguments("disable-popup-blocking");
@@ -41,7 +39,6 @@ public class BaseTest {
         chromeOption.addArguments("disable-notifications");
         chromeOption.addArguments("disable-extensions");
         chromeOption.addArguments("guest");
-
 
         driver = new ChromeDriver(chromeOption);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
@@ -56,10 +53,10 @@ public class BaseTest {
         cartPage = new CartPage(driver);
         checkoutStepOnePage = new CheckoutStepOnePage(driver);
         checkoutStepTwoPage = new CheckoutStepTwoPage(driver);
-
+        header = new Header(driver);
 
         driver.get(URL.MAIN);
-        Assertions.assertEquals(Login.LOGO_TEXT, loginPage.getLogoText());
+        Assertions.assertEquals(Header.LOGO_TEXT, loginPage.getLogoText());
     }
 
     @AfterEach
@@ -71,7 +68,6 @@ public class BaseTest {
 
     @AfterAll
     public static void after() {
-
         driver.quit();
     }
 }
