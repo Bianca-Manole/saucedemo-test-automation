@@ -1,0 +1,52 @@
+{
+  "valid": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "zip": "12345"
+  },
+  "emptyFirstName": {
+    "firstName": "",
+    "lastName": "Doe",
+    "zip": "12345"
+  },
+  "emptyLastName": {
+    "firstName": "John",
+    "lastName": "",
+    "zip": "12345"
+  },
+  "emptyZip": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "zip": ""
+  },
+  "firstNameMaxLength": {
+    "firstName": "Johnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "lastName": "Doe",
+    "zip": "12345"
+  },
+  "firstNameBelowMaxLength": {
+    "firstName": "Johnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "lastName": "Doe",
+    "zip": "12345"
+  },
+  "firstNameOverLimit": {
+    "firstName": "Johnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "lastName": "Doe",
+    "zip": "12345"
+  },
+  "zipMaxLength": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "zip": "123456"
+  },
+  "zipOverLimit": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "zip": "1234567"
+  },
+  "zipAlphaCharacters" : {
+    "firstName" : "John",
+    "lastName" : "Doe",
+    "zip" : "abcdef"
+  }
+}
