@@ -4,39 +4,34 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class Reader {
-    public static JSONObject json(String name) {
-        String jsonPath=System.getProperty("user.dir")+"\\src\\main\\java\\testdata\\files\\"+name+".json";
+    private static final String TEST_DATA_DIR = "/testdata/";
 
-        //read the json file from the specified location
-        FileReader reader = null;
-        try {
-            reader = new FileReader(jsonPath);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        //define the parser for the json content
-        JSONParser jsonParser = new JSONParser();
-        //define the JSONObject
-        JSONObject obj = null;
-        try {
-            obj = (JSONObject) jsonParser.parse(reader);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return obj;
+    private Reader() {
     }
 
-}
+    public static JSONObject json(String name) {
+        String resource = TEST_DATA_DIR + name + ".json";
+        try (InputStream in = Reader.class.getResourceAsStream(resource)) {
+            if (in == null) {
+                throw new IllegalArgumentException("Test data file not found on classpath: " + resource);
+            }
+            return (JSONObject) new JSONParser().parse(new InputStreamReader(in, StandardCharsets.UTF_8));
+        } catch (IOException | ParseException e) {
+            throw new RuntimeException("Could not parse test data file: " + resource, e);
+        }
+    }
 
+    public static JSONObject entry(String file, String key) {
+        JSONObject entry = (JSONObject) json(file).get(key);
+        if (entry == null) {
+            throw new IllegalArgumentException("Key '" + key + "' not found in " + file + ".json");
+        }
+        return entry;
+    }
+}

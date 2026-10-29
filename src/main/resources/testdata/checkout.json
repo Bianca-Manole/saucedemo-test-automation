@@ -29,24 +29,9 @@
     "lastName": "Doe",
     "zip": "12345"
   },
-  "firstNameOverLimit": {
-    "firstName": "Johnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
-    "lastName": "Doe",
-    "zip": "12345"
-  },
   "zipMaxLength": {
     "firstName": "John",
     "lastName": "Doe",
     "zip": "123456"
-  },
-  "zipOverLimit": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "zip": "1234567"
-  },
-  "zipAlphaCharacters" : {
-    "firstName" : "John",
-    "lastName" : "Doe",
-    "zip" : "abcdef"
   }
 }

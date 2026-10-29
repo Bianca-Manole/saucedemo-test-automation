@@ -9,7 +9,7 @@ public class Product {
     private final String price;
 
     public Product(String productKey) {
-        JSONObject product = (JSONObject) Reader.json("products").get(productKey);
+        JSONObject product = Reader.entry("products", productKey);
         this.name = product.get("name").toString();
         this.description = product.get("description").toString();
         this.price = product.get("price").toString();

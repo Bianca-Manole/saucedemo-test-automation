@@ -1,13 +1,9 @@
 {
-  "standard": {
-    "username": "standard_user",
-    "password" : "secret_sauce"
-  },
   "locked": {
     "username": "locked_out_user",
     "password" : "secret_sauce"
   },
-  "invalid": {
+  "invalidCredentials": {
     "username": "standard_username",
     "password" : "secret_sauce"
   }
