@@ -5,6 +5,7 @@ import com.saucedemo.api.models.WebManifest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -25,9 +26,10 @@ public class SauceDemoGetApiTests {
         Response response = sauceDemo.getHomePage();
 
         Assertions.assertEquals(200, response.statusCode(), "Home page should return 200");
-        Assertions.assertTrue(response.contentType().startsWith("text/html"), "Home page should be HTML");
-        Assertions.assertTrue(response.asString().contains("<title>" + APP_NAME + "</title>"), "Page title should be " + APP_NAME);
-        Assertions.assertTrue(response.asString().contains("<div id=\"root\">"), "Page should contain the React root element");
+        Assertions.assertAll("Home page content",
+                () -> Assertions.assertTrue(response.contentType().startsWith("text/html"), "Home page should be HTML"),
+                () -> Assertions.assertTrue(response.asString().contains("<title>" + APP_NAME + "</title>"), "Page title should be " + APP_NAME),
+                () -> Assertions.assertTrue(response.asString().contains("<div id=\"root\">"), "Page should contain the React root element"));
     }
 
     @Test
@@ -45,9 +47,10 @@ public class SauceDemoGetApiTests {
         Assertions.assertEquals(200, response.statusCode(), "manifest.json should return 200");
         Assertions.assertTrue(response.contentType().startsWith("application/json"), "manifest.json should be JSON");
         WebManifest manifest = response.as(WebManifest.class);
-        Assertions.assertEquals(APP_NAME, manifest.name(), "App name should match");
-        Assertions.assertEquals(APP_NAME, manifest.shortName(), "App short name should match");
-        Assertions.assertFalse(manifest.icons().isEmpty(), "Manifest should list the app icons");
+        Assertions.assertAll("Manifest content",
+                () -> Assertions.assertEquals(APP_NAME, manifest.name(), "App name should match"),
+                () -> Assertions.assertEquals(APP_NAME, manifest.shortName(), "App short name should match"),
+                () -> Assertions.assertFalse(manifest.icons().isEmpty(), "Manifest should list the app icons"));
     }
 
     @Test
@@ -62,11 +65,12 @@ public class SauceDemoGetApiTests {
     public void everyIconListedInManifestIsAvailable() {
         WebManifest manifest = sauceDemo.getManifest().as(WebManifest.class);
 
-        for (WebManifest.ManifestIcon icon : manifest.icons()) {
+        // Checks every icon even if one fails, so the report lists all broken icons at once.
+        Assertions.assertAll("Manifest icons", manifest.icons().stream().map(icon -> (Executable) () -> {
             Response response = sauceDemo.getResource(icon.src());
             Assertions.assertEquals(200, response.statusCode(), "Icon " + icon.src() + " should return 200");
             Assertions.assertEquals(icon.type(), response.contentType(), "Icon " + icon.src() + " should have the declared type");
-        }
+        }));
     }
 
     @Test

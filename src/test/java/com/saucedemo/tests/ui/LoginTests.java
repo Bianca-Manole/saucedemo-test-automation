@@ -12,8 +12,9 @@ public class LoginTests extends BaseTest {
     public void standardUserIsRedirectedToInventory() {
         loginPage.login(standardUser);
 
-        Assertions.assertTrue(inventoryPage.isOpen(), "Standard user should land on the inventory page after login");
-        Assertions.assertTrue(inventoryPage.isProductListVisible(), "Product list should be visible after login");
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(inventoryPage.isOpen(), "Standard user should land on the inventory page after login"),
+                () -> Assertions.assertTrue(inventoryPage.isProductListVisible(), "Product list should be visible after login"));
     }
 
     @Test

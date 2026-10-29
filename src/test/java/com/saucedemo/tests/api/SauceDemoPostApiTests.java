@@ -29,8 +29,9 @@ public class SauceDemoPostApiTests {
     public void refusedPostReturnsErrorPageWithoutSessionCookie() {
         Response response = sauceDemo.postLogin(User.fromConfig());
 
-        Assertions.assertTrue(response.asString().contains("405 Not Allowed"), "Response should be the 405 error page");
-        Assertions.assertNull(response.getCookie("session-username"), "Server should not start a session");
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(response.asString().contains("405 Not Allowed"), "Response should be the 405 error page"),
+                () -> Assertions.assertNull(response.getCookie("session-username"), "Server should not start a session"));
     }
 
     @Test

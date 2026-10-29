@@ -21,10 +21,11 @@ public class CheckoutTests extends BaseTest {
     @Test
     public void checkoutInformationPageShowsFormAndButtons() {
         Assertions.assertTrue(checkoutStepOnePage.isOpen(), "Checkout step one should be open");
-        Assertions.assertEquals(Checkout.CHECKOUT_TITLE_ONE_TEXT, checkoutStepOnePage.getTitleText(), "Title should match");
-        Assertions.assertTrue(checkoutStepOnePage.isCheckoutFormVisible(), "Checkout form should be visible");
-        Assertions.assertTrue(checkoutStepOnePage.isContinueButtonVisible(), "Continue button should be visible");
-        Assertions.assertTrue(checkoutStepOnePage.isCancelButtonVisible(), "Cancel button should be visible");
+        Assertions.assertAll("Checkout information page",
+                () -> Assertions.assertEquals(Checkout.CHECKOUT_TITLE_ONE_TEXT, checkoutStepOnePage.getTitleText(), "Title should match"),
+                () -> Assertions.assertTrue(checkoutStepOnePage.isCheckoutFormVisible(), "Checkout form should be visible"),
+                () -> Assertions.assertTrue(checkoutStepOnePage.isContinueButtonVisible(), "Continue button should be visible"),
+                () -> Assertions.assertTrue(checkoutStepOnePage.isCancelButtonVisible(), "Cancel button should be visible"));
     }
 
     @Test
@@ -81,8 +82,9 @@ public class CheckoutTests extends BaseTest {
 
     private void assertOverviewIsOpen() {
         Assertions.assertTrue(checkoutStepTwoPage.isOpen(), "Checkout overview should be open");
-        Assertions.assertEquals(Checkout.CHECKOUT_TITLE_TWO_TEXT, checkoutStepTwoPage.getTitleText(), "Title should match");
-        Assertions.assertTrue(checkoutStepTwoPage.isFinishButtonVisible(), "Finish button should be visible");
-        Assertions.assertTrue(checkoutStepTwoPage.isCancelButtonVisible(), "Cancel button should be visible");
+        Assertions.assertAll("Checkout overview page",
+                () -> Assertions.assertEquals(Checkout.CHECKOUT_TITLE_TWO_TEXT, checkoutStepTwoPage.getTitleText(), "Title should match"),
+                () -> Assertions.assertTrue(checkoutStepTwoPage.isFinishButtonVisible(), "Finish button should be visible"),
+                () -> Assertions.assertTrue(checkoutStepTwoPage.isCancelButtonVisible(), "Cancel button should be visible"));
     }
 }

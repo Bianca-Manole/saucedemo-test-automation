@@ -60,9 +60,10 @@ public class ProductTests extends BaseTest {
         inventoryPage.openProduct(backpack.getName());
 
         Assertions.assertTrue(itemPage.isOpen(), "Product detail page should be open");
-        Assertions.assertEquals(backpack.getName(), itemPage.getItemName(), "Product name should match");
-        Assertions.assertEquals(backpack.getDescription(), itemPage.getItemDescription(), "Product description should match");
-        Assertions.assertEquals(backpack.getPrice(), itemPage.getItemPrice(), "Product price should match");
+        Assertions.assertAll("Product details",
+                () -> Assertions.assertEquals(backpack.getName(), itemPage.getItemName(), "Product name should match"),
+                () -> Assertions.assertEquals(backpack.getDescription(), itemPage.getItemDescription(), "Product description should match"),
+                () -> Assertions.assertEquals(backpack.getPrice(), itemPage.getItemPrice(), "Product price should match"));
     }
 
     @Test
@@ -70,7 +71,8 @@ public class ProductTests extends BaseTest {
         inventoryPage.openProduct(backpack.getName());
         itemPage.addToCart();
 
-        Assertions.assertTrue(itemPage.isRemoveButtonVisible(), "Remove button should replace Add to cart");
-        Assertions.assertEquals("1", header.getCartBadgeCount(), "Cart badge should show 1 item");
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(itemPage.isRemoveButtonVisible(), "Remove button should replace Add to cart"),
+                () -> Assertions.assertEquals("1", header.getCartBadgeCount(), "Cart badge should show 1 item"));
     }
 }
