@@ -36,3 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+### Local AI assistant notes ###
+CLAUDE.md
