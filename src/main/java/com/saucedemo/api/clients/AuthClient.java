@@ -7,7 +7,11 @@ import io.restassured.response.Response;
 public class AuthClient extends ApiClient {
     private static final String AUTH = "/auth";
 
+    public AuthClient() {
+        super("apiBaseUrl");
+    }
+
     public Response createToken(Credentials credentials) {
-        return request().body(credentials).post(AUTH);
+        return jsonRequest().body(credentials).post(AUTH);
     }
 }

@@ -2,6 +2,8 @@ package com.saucedemo.tests;
 
 import com.saucedemo.tests.api.AuthApiTests;
 import com.saucedemo.tests.api.BookingApiTests;
+import com.saucedemo.tests.api.SauceDemoGetApiTests;
+import com.saucedemo.tests.api.SauceDemoPostApiTests;
 import com.saucedemo.tests.ui.CartTests;
 import com.saucedemo.tests.ui.CheckoutTests;
 import com.saucedemo.tests.ui.E2ETests;
@@ -16,6 +18,8 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 @Suite
 @SuiteDisplayName("Full Regression (API + UI)")
 @SelectClasses({
+        SauceDemoGetApiTests.class,
+        SauceDemoPostApiTests.class,
         AuthApiTests.class,
         BookingApiTests.class,
         LoginTests.class,
