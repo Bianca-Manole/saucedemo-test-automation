@@ -85,3 +85,14 @@ saucedemo is a static React single-page application hosted on GitHub Pages — i
 - `mvn surefire-report:report-only` generates `target/reports/surefire.html`.
 - In CI the report is attached to every run as the `test-report` artifact (Actions tab → run → Artifacts), plus `failure-screenshots` when a UI test fails.
 - [`reports/`](reports/) holds a snapshot of the latest full local run — see [`reports/README.md`](reports/README.md).
+
+## Known limitations and next steps
+
+- **API coverage is limited by the application.** saucedemo has no backend, so login and cart cannot be tested over HTTP; the API tests cover what the static server actually does.
+- **`homePageRespondsWithinTwoSeconds` depends on the network** and may fail on a very slow connection.
+- **Tests run one at a time.** Each test has its own browser, so parallel execution (JUnit 5 parallel mode) would be a straightforward next step to shorten the run.
+- **Reporting is Surefire HTML.** A richer report such as Allure, with steps and screenshots attached to each test, could be added.
+
+## Author
+
+**Bianca Manole** — [LinkedIn](https://www.linkedin.com/in/bianca-manole-1371b9172/)
