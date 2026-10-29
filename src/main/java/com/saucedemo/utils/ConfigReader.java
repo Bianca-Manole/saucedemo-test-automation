@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+// Values come from config.properties and can be overridden per run with a system property,
+// e.g. mvn test -Dbrowser=firefox -Dheadless=true
 public class ConfigReader {
     private static final String CONFIG_FILE = "config.properties";
     private static final Properties PROPS = load();
@@ -22,7 +24,7 @@ public class ConfigReader {
     }
 
     public static String get(String key) {
-        String value = PROPS.getProperty(key);
+        String value = System.getProperty(key, PROPS.getProperty(key));
         if (value == null) {
             throw new IllegalArgumentException("Missing key '" + key + "' in " + CONFIG_FILE);
         }
@@ -31,5 +33,9 @@ public class ConfigReader {
 
     public static int getInt(String key) {
         return Integer.parseInt(get(key));
+    }
+
+    public static boolean getBoolean(String key) {
+        return Boolean.parseBoolean(get(key));
     }
 }

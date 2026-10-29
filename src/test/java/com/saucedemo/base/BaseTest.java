@@ -16,7 +16,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import testdata.classes.User;
 
 import java.util.Map;
@@ -38,8 +40,11 @@ public abstract class BaseTest {
 
     @BeforeEach
     public void setUp() {
-        driver = createDriver(ConfigReader.get("browser"));
-        driver.manage().window().maximize();
+        boolean headless = ConfigReader.getBoolean("headless");
+        driver = createDriver(ConfigReader.get("browser"), headless);
+        if (!headless) {
+            driver.manage().window().maximize();
+        }
         driver.get(ConfigReader.get("baseUrl"));
 
         loginPage = new LoginPage(driver);
@@ -67,17 +72,39 @@ public abstract class BaseTest {
         loginPage.login(standardUser);
     }
 
-    private static WebDriver createDriver(String browser) {
+    // Headless browsers have no screen to maximize into, so they get a fixed desktop-sized window.
+    private static final String WINDOW_SIZE = "--window-size=1920,1080";
+
+    private static WebDriver createDriver(String browser, boolean headless) {
         return switch (browser.toLowerCase()) {
-            case "chrome" -> new ChromeDriver(chromeOptions());
-            case "firefox" -> new FirefoxDriver();
-            case "edge" -> new EdgeDriver();
-            default -> throw new IllegalArgumentException("Unsupported browser in config.properties: " + browser);
+            case "chrome" -> new ChromeDriver(chromeOptions(headless));
+            case "firefox" -> new FirefoxDriver(firefoxOptions(headless));
+            case "edge" -> new EdgeDriver(edgeOptions(headless));
+            default -> throw new IllegalArgumentException("Unsupported browser '" + browser + "', use chrome, firefox or edge");
         };
     }
 
-    private static ChromeOptions chromeOptions() {
+    private static FirefoxOptions firefoxOptions(boolean headless) {
+        FirefoxOptions options = new FirefoxOptions();
+        if (headless) {
+            options.addArguments("-headless", "--width=1920", "--height=1080");
+        }
+        return options;
+    }
+
+    private static EdgeOptions edgeOptions(boolean headless) {
+        EdgeOptions options = new EdgeOptions();
+        if (headless) {
+            options.addArguments("--headless=new", WINDOW_SIZE);
+        }
+        return options;
+    }
+
+    private static ChromeOptions chromeOptions(boolean headless) {
         ChromeOptions options = new ChromeOptions();
+        if (headless) {
+            options.addArguments("--headless=new", WINDOW_SIZE, "--disable-dev-shm-usage");
+        }
         options.addArguments(
                 "--remote-allow-origins=*",
                 "ignore-certificate-errors",
