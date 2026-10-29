@@ -5,44 +5,47 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-# Compile the project
-mvn compile
+# Run the whole suite (RegressionSuite decides which classes run and in what order)
+mvn clean test
 
-# Run all tests
-mvn test
-
-# Run a specific test class
+# Run a single test class / method
 mvn test -Dtest=LoginTests
+mvn test -Dtest=LoginTests#logoutReturnsToLoginPage
 
-# Run a single test method
-mvn test -Dtest=LoginTests#loginStandardUser
+# HTML report after a run -> target/reports/surefire.html
+mvn surefire-report:report-only
 ```
 
-Tests require Chrome to be installed — `BaseTest` launches a real ChromeDriver instance (no headless mode configured).
+Tests need a local Chrome (or Firefox/Edge, see `browser` in `config.properties`). Selenium Manager resolves the driver; there is no WebDriverManager.
 
 ## Architecture
 
-This is a **Selenium + JUnit 5** end-to-end test suite for [saucedemo.com](https://www.saucedemo.com/).
+**Selenium 4 + JUnit 5** UI test framework for [saucedemo.com](https://www.saucedemo.com/), layered as base / pages / utils / tests.
 
-### Two-layer page object model
+| Layer | Location | Job |
+|---|---|---|
+| `base/BasePage` | `src/main/java/com/saucedemo/base` | Shared actions with explicit waits: `click`, `type`, `textOf`, `textsOf`, `isVisible`, `isGone`, `isAtUrl`. Retries on stale elements. |
+| `pages/` | `src/main/java/com/saucedemo/pages` | One class per page (+ `components/Header`), extends `BasePage`. Private `By` locators, intent-named methods, own URL path for `isOpen()`. |
+| `utils/` | `src/main/java/com/saucedemo/utils` | `ConfigReader` (reads `config.properties`), `Reader` (JSON test data from classpath), `ScreenshotUtil`. |
+| `base/BaseTest` | `src/test/java/com/saucedemo/base` | Fresh browser per test (`@BeforeEach`), always quit in `@AfterEach`, creates page objects, `loginAsStandardUser()`. |
+| `tests/` | `src/test/java/com/saucedemo/tests` | One class per feature, Arrange / Act / Assert. `RegressionSuite` (`@Suite`) is the testng.xml equivalent. |
 
-**Layer 1 — `testdata.pages.*`** (e.g., `testdata/pages/Login.java`): Pure data classes holding Selenium `By` locators and expected string constants. No driver interaction. These are the single source of truth for selectors and expected text.
+### Rules
 
-**Layer 2 — `com.saucedemo.*`** (e.g., `com/saucedemo/LoginPage.java`): Page action classes that accept a `WebDriver` and use the locators from Layer 1 to interact with the browser. Each page class corresponds to one page of the app.
+- **No locator, `driver.findElement` or wait in a test class; no assertion in a page class.** Pages report facts (texts, numbers, booleans); tests judge them, e.g. sorting and total calculations are asserted in the test.
+- **No URL, credential or timeout hardcoded in tests** — they come from `config.properties` (project root).
+- **No `Thread.sleep`** — use the `BasePage` helpers.
+- Every assertion has a message; test names describe the expected behaviour.
+- No assertions in `@BeforeEach`; each test must pass when run on its own.
 
-### Test data via JSON + model classes
+### Test data
 
-User credentials and checkout data live in `src/main/java/testdata/files/*.json`. The `Reader` utility (`com/saucedemo/utils/Reader.java`) loads them by filename. Model classes (`testdata.classes.User`, `testdata.classes.CheckoutUser`) take a string key (e.g., `"standard"`, `"valid"`) and hydrate from the JSON — this is how tests instantiate test users without hardcoding credentials.
+- `config.properties`: `baseUrl`, `browser`, `timeout`, `username`/`password` of the standard user (`User.fromConfig()`).
+- `src/main/resources/testdata/*.json`, loaded by key through model classes in `testdata.classes`: `User("locked")`, `CheckoutInfo("valid")`, `Product("backpack")`. Missing files/keys fail fast.
+- Expected UI texts live in `testdata.pages.*` (`Login`, `Inventory`, `Cart`, `Checkout`).
 
-### Test structure
+### Failures
 
-All test classes extend `BaseTest`, which:
-- Creates a single `ChromeDriver` instance per test class (`@BeforeAll`)
-- Navigates to the login page and instantiates all page objects before each test (`@BeforeEach`)
-- Clears cookies and storage after each test (`@AfterEach`) to reset state without a full browser restart
+`ScreenshotOnFailureExtension` (registered on `BaseTest`) saves a PNG to `screenshots/` when a test or its `@BeforeEach` fails, before the browser is closed.
 
-Test classes: `LoginTests`, `ProductTests`, `CartTests`, `CheckoutTests`, `E2ETests`.
-
-### URL constants
-
-`testdata.URL` holds all page paths. `Helper.getItemURL(productID)` builds item detail URLs. Item IDs 0–5 are mapped to product constants in `testdata.URL`.
+Surefire only includes `RegressionSuite`; adding a new test class means adding it to `@SelectClasses` there.
