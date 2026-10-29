@@ -38,3 +38,4 @@ build/
 .DS_Store
 ### Local AI assistant notes ###
 CLAUDE.md
+.claude/
