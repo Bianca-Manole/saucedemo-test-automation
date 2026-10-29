@@ -1,6 +1,6 @@
 # SauceDemo Test Automation Framework
 
-[![Tests](https://github.com/Bianca-Manole/final-project/actions/workflows/tests.yml/badge.svg)](https://github.com/Bianca-Manole/final-project/actions/workflows/tests.yml)
+[![Tests](https://github.com/Bianca-Manole/saucedemo-test-automation/actions/workflows/tests.yml/badge.svg)](https://github.com/Bianca-Manole/saucedemo-test-automation/actions/workflows/tests.yml)
 
 UI and API test automation framework for [saucedemo.com](https://www.saucedemo.com/) (Swag Labs demo shop), built with **Java 17, Selenium 4, RestAssured and JUnit 5**, using the Page Object Model.
 
