@@ -8,6 +8,7 @@ import com.saucedemo.pages.InventoryPage;
 import com.saucedemo.pages.ItemPage;
 import com.saucedemo.pages.LoginPage;
 import com.saucedemo.pages.components.Header;
+import com.saucedemo.testdata.classes.User;
 import com.saucedemo.utils.ConfigReader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +20,14 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import testdata.classes.User;
 
 import java.util.Map;
 
 @ExtendWith(ScreenshotOnFailureExtension.class)
 public abstract class BaseTest {
+    // Headless browsers have no screen to maximize into, so they get a fixed desktop-sized window.
+    private static final String WINDOW_SIZE = "--window-size=1920,1080";
+
     protected WebDriver driver;
 
     protected LoginPage loginPage;
@@ -71,9 +74,6 @@ public abstract class BaseTest {
     protected void loginAsStandardUser() {
         loginPage.login(standardUser);
     }
-
-    // Headless browsers have no screen to maximize into, so they get a fixed desktop-sized window.
-    private static final String WINDOW_SIZE = "--window-size=1920,1080";
 
     private static WebDriver createDriver(String browser, boolean headless) {
         return switch (browser.toLowerCase()) {

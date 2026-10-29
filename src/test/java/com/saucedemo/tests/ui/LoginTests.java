@@ -1,10 +1,10 @@
 package com.saucedemo.tests.ui;
 
 import com.saucedemo.base.BaseTest;
+import com.saucedemo.testdata.classes.User;
+import com.saucedemo.testdata.pages.Login;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import testdata.classes.User;
-import testdata.pages.Login;
 
 public class LoginTests extends BaseTest {
 

@@ -31,10 +31,6 @@ public class Header extends BasePage {
         click(CART_LINK);
     }
 
-    public boolean isCartBadgeVisible() {
-        return isVisible(CART_BADGE);
-    }
-
     public String getCartBadgeCount() {
         return textOf(CART_BADGE);
     }

@@ -1,4 +1,4 @@
-package testdata.classes;
+package com.saucedemo.testdata.classes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saucedemo.utils.ConfigReader;

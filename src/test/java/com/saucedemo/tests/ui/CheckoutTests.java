@@ -1,12 +1,12 @@
 package com.saucedemo.tests.ui;
 
 import com.saucedemo.base.BaseTest;
+import com.saucedemo.testdata.classes.CheckoutInfo;
+import com.saucedemo.testdata.classes.Product;
+import com.saucedemo.testdata.pages.Checkout;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import testdata.classes.CheckoutInfo;
-import testdata.classes.Product;
-import testdata.pages.Checkout;
 
 public class CheckoutTests extends BaseTest {
 
@@ -59,23 +59,17 @@ public class CheckoutTests extends BaseTest {
                 "Missing postal code should show an error");
     }
 
+    // saucedemo has no length limit on these fields; these tests make sure long values are not rejected.
     @Test
-    public void firstNameAtMaxLengthIsAccepted() {
-        checkoutStepOnePage.submitInformation(new CheckoutInfo("firstNameMaxLength"));
+    public void longFirstNameIsAccepted() {
+        checkoutStepOnePage.submitInformation(new CheckoutInfo("longFirstName"));
 
         assertOverviewIsOpen();
     }
 
     @Test
-    public void firstNameBelowMaxLengthIsAccepted() {
-        checkoutStepOnePage.submitInformation(new CheckoutInfo("firstNameBelowMaxLength"));
-
-        assertOverviewIsOpen();
-    }
-
-    @Test
-    public void zipAtMaxLengthIsAccepted() {
-        checkoutStepOnePage.submitInformation(new CheckoutInfo("zipMaxLength"));
+    public void longZipIsAccepted() {
+        checkoutStepOnePage.submitInformation(new CheckoutInfo("longZip"));
 
         assertOverviewIsOpen();
     }

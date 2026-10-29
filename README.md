@@ -4,7 +4,7 @@
 
 UI and API test automation framework for [saucedemo.com](https://www.saucedemo.com/) (Swag Labs demo shop), built with **Java 17, Selenium 4, RestAssured and JUnit 5**, using the Page Object Model.
 
-**42 automated tests** — 25 UI, 17 API — run from one command, locally or in GitHub Actions.
+**41 automated tests** — 24 UI, 17 API — run from one command, locally or in GitHub Actions.
 
 ## Tech stack
 
@@ -26,7 +26,7 @@ src/main/java/com/saucedemo/
   pages/                     one Page Object per screen + components/Header
   api/                       ApiClient, clients/SauceDemoClient, models/WebManifest
   utils/                     ConfigReader, Reader (JSON test data), ScreenshotUtil
-src/main/java/testdata/      test data classes (User, Product, CheckoutInfo) and expected UI texts
+  testdata/                  test data classes (User, Product, CheckoutInfo) and expected UI texts
 src/main/resources/          testdata/*.json, schemas/manifest-schema.json
 src/test/java/com/saucedemo/
   base/                      BaseTest (browser lifecycle), ScreenshotOnFailureExtension
@@ -68,9 +68,9 @@ Every value in `config.properties` (`baseUrl`, `browser`, `headless`, `timeout`,
 | API (GET) | `SauceDemoGetApiTests` | 11 | home page served as HTML, response time, `manifest.json` content + JSON schema, every declared icon, JS bundle, `robots.txt`, inner routes return 404 on the server |
 | API (POST) | `SauceDemoPostApiTests` | 6 | login data, cart data and any POST are refused (405) and no session is created |
 | Login | `LoginTests` | 5 | valid login, locked-out user, invalid credentials, menu, logout |
-| Products | `ProductTests` | 6 | sorting by name and price (both directions), product detail page, add to cart from detail page |
+| Products | `ProductTests` | 6 | sorting by name and price (both directions; A→Z starts from Z→A because A→Z is the default order), product detail page, add to cart from detail page |
 | Cart | `CartTests` | 5 | badge and button state, cart contents, remove, continue shopping |
-| Checkout | `CheckoutTests` | 8 | form and buttons, valid data, each required field, length boundaries |
+| Checkout | `CheckoutTests` | 7 | form and buttons, valid data, each required field, long first name and postal code accepted (the app has no length limit) |
 | End-to-end | `E2ETests` | 1 | full purchase: login → product → cart → checkout → overview (total = subtotal + tax) → confirmation |
 
 ### About the API tests

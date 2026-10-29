@@ -1,11 +1,11 @@
 package com.saucedemo.tests.ui;
 
 import com.saucedemo.base.BaseTest;
+import com.saucedemo.testdata.classes.CheckoutInfo;
+import com.saucedemo.testdata.classes.Product;
+import com.saucedemo.testdata.pages.Checkout;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import testdata.classes.CheckoutInfo;
-import testdata.classes.Product;
-import testdata.pages.Checkout;
 
 public class E2ETests extends BaseTest {
 

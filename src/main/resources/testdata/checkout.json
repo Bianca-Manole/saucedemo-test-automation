@@ -19,19 +19,14 @@
     "lastName": "Doe",
     "zip": ""
   },
-  "firstNameMaxLength": {
-    "firstName": "Johnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+  "longFirstName": {
+    "firstName": "Johnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
     "lastName": "Doe",
     "zip": "12345"
   },
-  "firstNameBelowMaxLength": {
-    "firstName": "Johnnnnnnnnnnnnnnnnnnnnnnnnnn",
-    "lastName": "Doe",
-    "zip": "12345"
-  },
-  "zipMaxLength": {
+  "longZip": {
     "firstName": "John",
     "lastName": "Doe",
-    "zip": "123456"
+    "zip": "12345678901234567890"
   }
 }

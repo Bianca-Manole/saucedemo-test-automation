@@ -1,11 +1,11 @@
 package com.saucedemo.tests.ui;
 
 import com.saucedemo.base.BaseTest;
+import com.saucedemo.testdata.classes.Product;
+import com.saucedemo.testdata.pages.Cart;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import testdata.classes.Product;
-import testdata.pages.Cart;
 
 public class CartTests extends BaseTest {
 

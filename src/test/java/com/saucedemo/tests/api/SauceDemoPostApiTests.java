@@ -1,12 +1,12 @@
 package com.saucedemo.tests.api;
 
 import com.saucedemo.api.clients.SauceDemoClient;
+import com.saucedemo.testdata.classes.User;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import testdata.classes.User;
 
 import java.util.Map;
 

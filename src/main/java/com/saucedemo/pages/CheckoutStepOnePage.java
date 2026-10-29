@@ -1,9 +1,9 @@
 package com.saucedemo.pages;
 
 import com.saucedemo.base.BasePage;
+import com.saucedemo.testdata.classes.CheckoutInfo;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import testdata.classes.CheckoutInfo;
 
 public class CheckoutStepOnePage extends BasePage {
     private static final String PATH = "checkout-step-one.html";

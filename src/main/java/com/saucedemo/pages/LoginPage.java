@@ -1,9 +1,9 @@
 package com.saucedemo.pages;
 
 import com.saucedemo.base.BasePage;
+import com.saucedemo.testdata.classes.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import testdata.classes.User;
 
 public class LoginPage extends BasePage {
     private static final By USERNAME_INPUT = By.id("user-name");

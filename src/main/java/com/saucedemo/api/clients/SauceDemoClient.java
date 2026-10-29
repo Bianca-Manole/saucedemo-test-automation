@@ -1,9 +1,9 @@
 package com.saucedemo.api.clients;
 
 import com.saucedemo.api.ApiClient;
+import com.saucedemo.testdata.classes.User;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import testdata.classes.User;
 
 import java.util.Map;
 
