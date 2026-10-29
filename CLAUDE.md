@@ -24,7 +24,7 @@ Tests need a local Chrome (or Firefox/Edge, see `browser` in `config.properties`
 
 ## Architecture
 
-**Selenium 4 + RestAssured + JUnit 5** test framework for [saucedemo.com](https://www.saucedemo.com/): UI tests plus HTTP-level API tests (GET/POST) on saucedemo itself, and full CRUD API tests on [Restful Booker](https://restful-booker.herokuapp.com/apidoc/index.html). Layered as base / pages + api / utils / tests.
+**Selenium 4 + RestAssured + JUnit 5** test framework for [saucedemo.com](https://www.saucedemo.com/): UI tests plus HTTP-level API tests (GET/POST) on saucedemo itself. Only saucedemo is tested — do not add tests for other sites. Layered as base / pages + api / utils / tests.
 
 saucedemo is a static React single-page app hosted on GitHub Pages: there is no backend API. Login is checked in the browser (cookie `session-username`), the cart lives in `localStorage` (`cart-contents`). Over HTTP the server only serves files: `GET /`, `/manifest.json`, `/robots.txt`, icons and `/assets/*.js` return 200; inner pages like `/inventory.html` return 404 when requested directly; every `POST`/`PUT`/`DELETE` returns `405 Not Allowed`. `SauceDemoGetApiTests` / `SauceDemoPostApiTests` assert exactly this.
 
@@ -34,8 +34,7 @@ saucedemo is a static React single-page app hosted on GitHub Pages: there is no 
 | `pages/` | `src/main/java/com/saucedemo/pages` | One class per page (+ `components/Header`), extends `BasePage`. Private `By` locators, intent-named methods, own URL path for `isOpen()`. |
 | `utils/` | `src/main/java/com/saucedemo/utils` | `ConfigReader` (reads `config.properties`), `Reader` (JSON test data from classpath), `ScreenshotUtil`. |
 | `base/BaseTest` | `src/test/java/com/saucedemo/base` | Fresh browser per test (`@BeforeEach`), always quit in `@AfterEach`, creates page objects, `loginAsStandardUser()`. |
-| `api/` | `src/main/java/com/saucedemo/api` | `ApiClient` (base URL from a config key, `request()` / `jsonRequest()` / optional token cookie), `clients/` (`SauceDemoClient` on `baseUrl`, `AuthClient`/`BookingClient` on `apiBaseUrl`; methods return the raw `Response`), `models/` (records mapped to/from JSON by Jackson, e.g. `WebManifest`, `Booking`). |
-| `base/BaseApiTest` | `src/test/java/com/saucedemo/base` | Clients, cached auth `token()`, `createBooking(...)` setup helper; deletes every booking a test created in `@AfterEach`. |
+| `api/` | `src/main/java/com/saucedemo/api` | `ApiClient` (base request on `baseUrl`), `clients/SauceDemoClient` (GET/POST methods returning the raw `Response`), `models/WebManifest` (record mapped from `/manifest.json` by Jackson). |
 | `tests/ui`, `tests/api` | `src/test/java/com/saucedemo/tests` | One class per feature, Arrange / Act / Assert. `RegressionSuite` (`@Suite`, API first, then UI) is the testng.xml equivalent; `ApiSuite` / `UiSuite` run one layer. |
 
 ### Rules
@@ -52,13 +51,7 @@ saucedemo is a static React single-page app hosted on GitHub Pages: there is no 
 - `config.properties`: `baseUrl`, `browser`, `timeout`, `username`/`password` of the standard user (`User.fromConfig()`).
 - `src/main/resources/testdata/*.json`, loaded by key through model classes in `testdata.classes`: `User("locked")`, `CheckoutInfo("valid")`, `Product("backpack")`. Missing files/keys fail fast.
 - Expected UI texts live in `testdata.pages.*` (`Login`, `Inventory`, `Cart`, `Checkout`).
-- API: `apiBaseUrl`, `apiUsername`, `apiPassword` in `config.properties`; booking payloads in `testdata/bookings.json` (`Booking.fromTestData("default")`); JSON schemas (`booking-schema.json`, `manifest-schema.json`) in `src/main/resources/schemas/`.
-
-### Restful Booker quirks (asserted on purpose)
-
-- `Accept` must be exactly `application/json`, otherwise every call returns `418 I'm a Teapot`.
-- Bad credentials on `/auth` return `200` with `"reason": "Bad credentials"` (no 401).
-- Successful `DELETE` returns `201`; a booking with missing fields returns `500`.
+- API: same `baseUrl` and credentials as the UI; JSON schema for the manifest in `src/main/resources/schemas/manifest-schema.json`.
 
 ### Failures
 

@@ -14,10 +14,6 @@ public class SauceDemoClient extends ApiClient {
     private static final String MANIFEST = "/manifest.json";
     private static final String ROBOTS = "/robots.txt";
 
-    public SauceDemoClient() {
-        super("baseUrl");
-    }
-
     public Response getHomePage() {
         return request().get(HOME);
     }

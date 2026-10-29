@@ -1,7 +1,5 @@
 package com.saucedemo.tests;
 
-import com.saucedemo.tests.api.AuthApiTests;
-import com.saucedemo.tests.api.BookingApiTests;
 import com.saucedemo.tests.api.SauceDemoGetApiTests;
 import com.saucedemo.tests.api.SauceDemoPostApiTests;
 import com.saucedemo.tests.ui.CartTests;
@@ -14,14 +12,12 @@ import org.junit.platform.suite.api.Suite;
 import org.junit.platform.suite.api.SuiteDisplayName;
 
 // JUnit equivalent of testng.xml: which test classes run, and in what order.
-// API tests first: they are fast and tell quickly whether the backend is reachable.
+// API tests first: they are fast and tell quickly whether the site is reachable.
 @Suite
 @SuiteDisplayName("Full Regression (API + UI)")
 @SelectClasses({
         SauceDemoGetApiTests.class,
         SauceDemoPostApiTests.class,
-        AuthApiTests.class,
-        BookingApiTests.class,
         LoginTests.class,
         ProductTests.class,
         CartTests.class,
