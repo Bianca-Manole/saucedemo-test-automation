@@ -1,7 +1,7 @@
 package testdata.classes;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.saucedemo.utils.Reader;
-import org.json.simple.JSONObject;
 
 public class Product {
     private final String name;
@@ -9,10 +9,10 @@ public class Product {
     private final String price;
 
     public Product(String productKey) {
-        JSONObject product = Reader.entry("products", productKey);
-        this.name = product.get("name").toString();
-        this.description = product.get("description").toString();
-        this.price = product.get("price").toString();
+        JsonNode product = Reader.entry("products", productKey);
+        this.name = product.required("name").asText();
+        this.description = product.required("description").asText();
+        this.price = product.required("price").asText();
     }
 
     public String getName() { return name; }

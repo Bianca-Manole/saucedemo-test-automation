@@ -1,17 +1,17 @@
 package testdata.classes;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.saucedemo.utils.ConfigReader;
 import com.saucedemo.utils.Reader;
-import org.json.simple.JSONObject;
 
 public class User {
     private final String username;
     private final String password;
 
     public User(String userType) {
-        JSONObject user = Reader.entry("users", userType);
-        this.username = user.get("username").toString();
-        this.password = user.get("password").toString();
+        JsonNode user = Reader.entry("users", userType);
+        this.username = user.required("username").asText();
+        this.password = user.required("password").asText();
     }
 
     private User(String username, String password) {
