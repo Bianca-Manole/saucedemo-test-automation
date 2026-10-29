@@ -19,6 +19,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import testdata.classes.User;
 
+import java.util.Map;
+
 @ExtendWith(ScreenshotOnFailureExtension.class)
 public abstract class BaseTest {
     protected WebDriver driver;
@@ -86,8 +88,12 @@ public abstract class BaseTest {
                 "no-default-browser-check",
                 "--disable-search-engine-choice-screen",
                 "disable-notifications",
-                "disable-extensions",
-                "guest");
+                "disable-extensions");
+        // Stops Chrome's save-password and leaked-password popups from covering the page after login.
+        options.setExperimentalOption("prefs", Map.of(
+                "credentials_enable_service", false,
+                "profile.password_manager_enabled", false,
+                "profile.password_manager_leak_detection", false));
         return options;
     }
 }
